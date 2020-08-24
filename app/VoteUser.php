@@ -1,0 +1,92 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class VoteUser extends Model
+{
+
+    protected $table = 'votingplugin_users';
+
+    protected $primaryKey = 'uuid';
+
+    protected $fillable = [
+        'PlayerName', 'AllTimeTotal', 'MonthTotal',
+    ];
+
+    public static $months = [
+        1 => 'Leden',
+        2 => 'Únor',
+        3 => 'Březen',
+        4 => 'Duben',
+        5 => 'Květen',
+        6 => 'Červen',
+        7 => 'Červenec',
+        8 => 'Srpen',
+        9 => 'Září',
+        10 => 'Říjen',
+        11 => 'Listopad',
+        12 => 'Prosinec',
+    ];
+
+    /**
+     * @param $month int
+     * @return string
+     */
+    public static function localizeMonth($month): string
+    {
+        return self::$months[$month];
+    }
+
+    /**
+     * @param $top int
+     * @return array
+     */
+    public static function getTopVoters($top): array
+    {
+        $topVoters = self::orderByDesc('MonthTotal')->whereNull('TopVoterIgnore')->take($top)->get();
+        return [
+            $topVoters->first(),
+            $topVoters->get(2),
+            $topVoters->get(3),
+        ];
+    }
+
+    /**
+     * @return int
+     */
+    public static function getWeeklyVotesCount(): int
+    {
+        return self::where('WeeklyTotal', '>', 0)->pluck('WeeklyTotal')->sum();
+    }
+
+    /**
+     * @return int
+     */
+    public static function getWeeklyVoteUsersCount(): int
+    {
+        return self::where('WeeklyTotal', '>', 0)->pluck('WeeklyTotal')->count();
+    }
+
+    /**
+     * @return VoteUser
+     */
+    public static function getWeeklyTopVoter(): VoteUser
+    {
+        return self::orderByDesc('WeeklyTotal')->whereNull('TopVoterIgnore')->first();
+    }
+
+    public static function rollWeeklyWinner(): array
+    {
+        $votersCount = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->count();
+        $voters = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->get()->toArray();
+        $n = random_int(0, $votersCount);
+        $winner = $voters[$n];
+        return [
+            'winner' => $winner,
+            'number' => $n,
+            'totalPlayers' => $votersCount,
+        ];
+    }
+}
