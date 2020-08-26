@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class VoteUser extends Model
 {
 
-    protected $table = 'votingplugin_users';
+    protected $table = 'VotingPlugin_Users';
 
     protected $primaryKey = 'uuid';
 

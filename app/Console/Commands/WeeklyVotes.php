@@ -42,7 +42,6 @@ class WeeklyVotes extends Command
         $lottery = VoteUser::rollWeeklyWinner();
 
         //    if (\Carbon\Carbon::now()->endOfMonth()->toDateString() === \Carbon\Carbon::now()->toDateString()) {
-        $topVoters = VoteUser::getTopVoters(5);
         $hookObject = json_encode([
             "content" => "",
             "username" => "Czech-Survival",
@@ -50,7 +49,7 @@ class WeeklyVotes extends Command
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => 'Týdenní shrnutí',
+                    "title" => 'Týdenní shrnutí ('. Carbon::today()->subDays(7)->format('d.m.Y') .' - '. Carbon::today()->format('d.m.Y').')',
                     "type" => "rich",
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
@@ -76,7 +75,7 @@ class WeeklyVotes extends Command
                             "name" => ':first_place: Výherce loterie',
                             "value" => 'Výhercem se stává: **' . $lottery['winner']['PlayerName'] . '** s výherním číslem: **' . $lottery['number'] .
                                 "\n **Do loterie bylo zapsáno **" . $lottery['totalPlayers'] . ' hráčů**.'.
-                                "\n\n Výhra: 10 bodů do voteshopu (bude vám připsána automaticky)",
+                                "\n\n `Výhra: 10 bodů do voteshopu (bude vám připsána automaticky)`",
                             "inline" => true
                         ],
                         [
@@ -97,8 +96,13 @@ class WeeklyVotes extends Command
 
         $ch = curl_init();
 
+        $webhook =  env('DISCORD_WEBHOOK_ANNOUCEMNETS');
+        if (env('APP_ENV') === 'local'){
+            $webhook = env('DISCORD_WEBHOOK_LOCAL');
+        }
+
         curl_setopt_array($ch, [
-            CURLOPT_URL => env('DISCORD_WEBHOOK_ANNOUCEMNETS'),
+            CURLOPT_URL => $webhook,
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $hookObject,
             CURLOPT_HTTPHEADER => [
