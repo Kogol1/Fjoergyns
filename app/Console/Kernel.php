@@ -26,5 +26,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('czs:top-vote')->dailyAt('22:30');
+        $schedule->command('czs:weekly-vote')->dailyAt('22:59');
     }
 }
