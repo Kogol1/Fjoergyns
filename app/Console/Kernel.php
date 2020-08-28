@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\TopVoters::class,
         \App\Console\Commands\WeeklyVotes::class,
+        \App\Console\Commands\TopWarns::class,
     ];
 
     /**

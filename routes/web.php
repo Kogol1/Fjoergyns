@@ -15,10 +15,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/top-vote', [
-    'as' => 'top-vote', 'uses' => 'TopVotersController@postToDiscord'
-]);
-
 $router->post('/test-api', [
     'as' => 'test-api', 'uses' => 'ApiController@post'
 ]);
