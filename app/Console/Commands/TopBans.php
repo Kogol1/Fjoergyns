@@ -2,17 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Warn;
+use App\Ban;
 use Illuminate\Console\Command;
 
-class TopWarns extends Command
+class TopBans extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'czs:top-warns';
+    protected $signature = 'czs:top-bans';
 
     /**
      * The console command description.
@@ -39,18 +39,19 @@ class TopWarns extends Command
     public function handle()
     {
 
-        $adminWarns = Warn::countWarnsByAdmins();
+        $adminBans = Ban::countBansByAdmins();
         $fields = [];
 
-        foreach ($adminWarns as $admin => $warnsCount) {
+        foreach ($adminBans as $admin => $bansCount) {
             $fields[] =
                 [
                     "name" => $admin,
-                    "value" => '⚠ Počet warnů celkem: **' . $warnsCount .'**'.
-                        "\n :clock1: Počet warnů za posledních 24 hodin: **" . Warn::countWarnsInPeriod($admin, 24) .'**'.
-                        "\n :calendar: Počet warnů za posledních 7 dní: **" . Warn::countWarnsInPeriod($admin, 24 * 7) .'**'.
-                        "\n <:grass_bounce:587505418406723584> Počet warnů na Survivalu za posledních 14 dní: **" . Warn::countWarnsInPeriodDifferServers($admin, 24 * 14)['survival'] .'**'.
-                        "\n <:mine_coin:442734230175481856> Počet warnů na Economy za posledních 14 dní: **" . Warn::countWarnsInPeriodDifferServers($admin, 24 * 14)['economy'].'**',
+                    "value" => '⚠ Počet banů celkem: **' . $bansCount .'**'.
+                        "\n :clock1: Počet banů za posledních 24 hodin: **" . Ban::countBansInPeriod($admin, 24) .'**'.
+                        "\n :calendar: Počet banů za posledních 7 dní: **" . Ban::countBansInPeriod($admin, 24 * 7) .'**'.
+                        "\n <:grass_bounce:587505418406723584> Počet banů na Survivalu za posledních 14 dní: **" . Ban::countBansInPeriodDifferServers($admin, 24 * 14)['survival'] .'**'.
+                        "\n <:mine_coin:442734230175481856> Počet banů na Economy za posledních 14 dní: **" . Ban::countBansInPeriodDifferServers($admin, 24 * 14)['economy'].'**'.
+                        "\n :wink: Počet perma banů celkem: **" . Ban::countPermaBans($admin).'**',
                     "inline" => false
                 ];
         }
@@ -66,7 +67,7 @@ class TopWarns extends Command
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => 'Počet warnů celkem: '.Warn::get('id')->count(),
+                    "title" => 'Počet banů celkem: '.Ban::get('id')->count(),
                     "type" => "rich",
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
@@ -74,9 +75,9 @@ class TopWarns extends Command
                         "text" => "Kogol Bot",
                         "icon_url" => "https://minotar.net/cube/Kogol/100.png"
                     ],
-                    "color" => hexdec("FF6347"),
+                    "color" => hexdec("b80e02"),
                     "author" => [
-                        'name' => '📈 Warns stats',
+                        'name' => '📈 Bans stats',
                         'icon_url' => 'https://czech-survival.cz/images/index/logo.png',
                     ],
                     "fields" => $fields,
