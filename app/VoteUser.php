@@ -81,12 +81,12 @@ class VoteUser extends Model
     public static function rollWeeklyWinner(): array
     {
         $votersCount = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->count();
-        $voters = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->get()->toArray();
+        $voters = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->get('PlayerName')->toArray();
         $n = random_int(0, $votersCount);
         $winner = $voters[$n];
         return [
             'winner' => $winner,
-            'number' => $n,
+            'number' => $n + 1,
             'totalPlayers' => $votersCount,
         ];
     }
