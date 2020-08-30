@@ -31,5 +31,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('czs:top-vote')->dailyAt('22:30');
         $schedule->command('czs:weekly-vote')->dailyAt('21:59');
+        $schedule->command('czs:top-warns')->dailyAt('10:00');
     }
 }

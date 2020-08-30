@@ -44,18 +44,23 @@ class TopWarns extends Command
         $adminWarns = Warn::countWarnsByAdmins();
         $fields = [];
 
-        foreach ($adminWarns as $admin => $warnsCount){
+        foreach ($adminWarns as $admin => $warnsCount) {
             $fields[] =
-            [
-                "name" => $admin,
-                "value" => '⚠ Počet warnů celkem: '.$warnsCount.
-                    "\n :clock1: Počet warnů za posledních 24 hodin: ".Warn::countWarnsInPeriod($admin, 24).
-                    "\n :calendar: Počet warnů za posledních 7 dní: ".Warn::countWarnsInPeriod($admin, 24*7).
-                    "\n <:grass_bounce:587505418406723584> Počet warnů na Survivalu za posledních 14 dní: ".Warn::countWarnsInPeriodDifferServers($admin, 24*14)['survival'].
-                    "\n <:mine_coin:442734230175481856> Počet warnů na Economy za posledních 14 dní: ".Warn::countWarnsInPeriodDifferServers($admin, 24*14)['economy'],
-                "inline" => false
-            ];
-                        }
+                [
+                    "name" => $admin,
+                    "value" => '⚠ Počet warnů celkem: ' . $warnsCount .
+                        "\n :clock1: Počet warnů za posledních 24 hodin: " . Warn::countWarnsInPeriod($admin, 24) .
+                        "\n :calendar: Počet warnů za posledních 7 dní: " . Warn::countWarnsInPeriod($admin, 24 * 7) .
+                        "\n <:grass_bounce:587505418406723584> Počet warnů na Survivalu za posledních 14 dní: " . Warn::countWarnsInPeriodDifferServers($admin, 24 * 14)['survival'] .
+                        "\n <:mine_coin:442734230175481856> Počet warnů na Economy za posledních 14 dní: " . Warn::countWarnsInPeriodDifferServers($admin, 24 * 14)['economy'],
+                    "inline" => false
+                ];
+        }
+        $fields[] = [
+            "name" => 'Neveřejné informace',
+            "value" => 'Prosím nesdílejte tyto informace s nikým kdo není v AT. Díky za pochopení :slight_smile: ',
+            "inline" => false
+        ];
         $hookObject = json_encode([
             "content" => "",
             "username" => "Czech-Survival",
@@ -77,13 +82,13 @@ class TopWarns extends Command
                         'icon_url' => 'https://czech-survival.cz/images/index/logo.png',
                     ],
                     "fields" => $fields,
-                    ],
                 ],
+            ],
 
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         $ch = curl_init();
-        $webhook = env('DISCORD_WEBHOOK_ANNOUCEMNETS');
+        $webhook = env('DISCORD_WEBHOOK_ADMIN_STATS');
         if (env('APP_ENV') === 'local') {
             $webhook = env('DISCORD_WEBHOOK_LOCAL');
         }
