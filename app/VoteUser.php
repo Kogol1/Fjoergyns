@@ -83,6 +83,7 @@ class VoteUser extends Model
         $votersCount = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->count();
         $voters = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->get('PlayerName')->toArray();
         $n = random_int(0, $votersCount);
+        shuffle($voters);
         $winner = $voters[$n];
         return [
             'winner' => $winner,
