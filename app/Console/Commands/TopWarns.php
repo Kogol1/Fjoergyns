@@ -73,7 +73,7 @@ class TopWarns extends Command
                     ],
                     "color" => hexdec("FF6347"),
                     "author" => [
-                        'name' => 'Fjoergyns',
+                        'name' => '📈 Warns stats',
                         'icon_url' => 'https://czech-survival.cz/images/index/logo.png',
                     ],
                     "fields" => $fields,

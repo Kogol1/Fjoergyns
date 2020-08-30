@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddKogolToVotingpluginUsersTable extends Migration
+class CreateAdminRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddKogolToVotingpluginUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('votingplugin_users', function (Blueprint $table) {
-            $table->string('fuck')->nullable();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('role_name');
+            $table->integer('order')->default(0);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddKogolToVotingpluginUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('votingplugin_users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('admin_roles');
     }
 }

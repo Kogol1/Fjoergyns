@@ -2,14 +2,31 @@
 
 namespace App;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
 
 class Admin extends Model
 {
+    protected $fillable = ['name', 'role', 'active',];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function aliases(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(AdminAlias::class);
+    }
+
+    /**
+     * @var array
+     */
     public static $admins = [
         'Teleriann',
         'Kogol',

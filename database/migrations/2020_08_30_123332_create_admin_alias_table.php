@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTestTable extends Migration
+class CreateAdminAliasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateTestTable extends Migration
      */
     public function up()
     {
-        Schema::create('test', function (Blueprint $table) {
+        Schema::create('admin_alias', function (Blueprint $table) {
             $table->id();
+            $table->string('alias_name');
+            $table->bigInteger('admin_id')->nullable()->unsigned();
             $table->timestamps();
+            $table->foreign('admin_id')->references('id')->on('admins');
         });
     }
 
@@ -26,6 +29,6 @@ class CreateTestTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test');
+        Schema::dropIfExists('admin_alias');
     }
 }

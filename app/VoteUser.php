@@ -8,6 +8,7 @@ class VoteUser extends Model
 {
 
     protected $table = 'VotingPlugin_Users';
+    protected $connection = 'mysql_vote';
 
     protected $primaryKey = 'uuid';
 

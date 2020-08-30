@@ -7,25 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Warn extends Model
 {
-
     protected $table = 'litebans_warnings';
+    protected $connection = 'mysql_litebans';
 
     protected $primaryKey = 'id';
-
-    public static $months = [
-        1 => 'Leden',
-        2 => 'Únor',
-        3 => 'Březen',
-        4 => 'Duben',
-        5 => 'Květen',
-        6 => 'Červen',
-        7 => 'Červenec',
-        8 => 'Srpen',
-        9 => 'Září',
-        10 => 'Říjen',
-        11 => 'Listopad',
-        12 => 'Prosinec',
-    ];
 
     /**
      * @return array
@@ -33,45 +18,56 @@ class Warn extends Model
     public static function countWarnsByAdmins(): array
     {
         $warns = [];
-        foreach (Admin::$admins as $admin)
+        foreach (Admin::where('active', true)->orderBy('role_id')->get() as $admin)
         {
-            $warnsCount = self::where('banned_by_name', $admin)->count();
-            if ($admin === '_TotoWolff_'){
-                $warnsCount += self::where('banned_by_name', 'Totowolff')->count();
+            $warnsCount = self::where('banned_by_name', $admin->name)->count();
+            if (!$admin->aliases->isEmpty()){
+                foreach ($admin->aliases as $alias){
+                    $warnsCount += self::where('banned_by_name', $alias->alias_name)->count();
+                }
             }
-            $warns[$admin] =$warnsCount;
+
+            $warns[$admin->name] =$warnsCount;
         }
         return $warns;
     }
 
     /**
-     * @param $admin string
+     * @param $adminName
      * @param $hours int
      * @return int
      */
-    public static function countWarnsInPeriod($admin, $hours): int
+    public static function countWarnsInPeriod($adminName, $hours): int
     {
-            $warnsCount = self::where('banned_by_name', $admin)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
-            if ($admin === '_TotoWolff_'){
-                $warnsCount += self::where('banned_by_name', 'Totowolff')->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
+        $admin = Admin::where('name', $adminName)->first();
+        $warnsCount = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
+        if (!$admin->aliases->isEmpty()){
+            foreach ($admin->aliases as $alias){
+                $warnsCount += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
             }
+        }
         return $warnsCount ?? 0;
     }
 
     /**
-     * @param $admin string
+     * @param $adminName
      * @param $hours int
-     * @return int
+     * @return array
      */
-    public static function countWarnsInPeriodDifferServers($admin, $hours): array
+    public static function countWarnsInPeriodDifferServers($adminName, $hours): array
     {
-        $warnsCountSurvival = self::where('banned_by_name', $admin)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'survival')->count();
-        if ($admin === '_TotoWolff_'){
-            $warnsCountSurvival += self::where('banned_by_name', 'Totowolff')->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'survival')->count();
+        $admin = Admin::where('name', $adminName)->first();
+        $warnsCountSurvival = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'survival')->count();
+        if (!$admin->aliases->isEmpty()){
+            foreach ($admin->aliases as $alias){
+                $warnsCountSurvival += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'survival')->count();
+            }
         }
-        $warnsCountEconomy = self::where('banned_by_name', $admin)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'economy')->count();
-        if ($admin === '_TotoWolff_'){
-            $warnsCountEconomy += self::where('banned_by_name', 'Totowolff')->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'economy')->count();
+        $warnsCountEconomy = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'economy')->count();
+        if (!$admin->aliases->isEmpty()){
+            foreach ($admin->aliases as $alias){
+                $warnsCountEconomy += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'economy')->count();
+            }
         }
         return ['survival' => $warnsCountSurvival ?? 0, 'economy' => $warnsCountEconomy ?? 0];
     }

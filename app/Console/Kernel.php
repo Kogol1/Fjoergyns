@@ -16,6 +16,9 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\TopVoters::class,
         \App\Console\Commands\WeeklyVotes::class,
         \App\Console\Commands\TopWarns::class,
+        \App\Console\Commands\CreateRole::class,
+        \App\Console\Commands\CreateAdmin::class,
+        \App\Console\Commands\CreateAlias::class,
     ];
 
     /**
