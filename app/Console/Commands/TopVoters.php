@@ -90,9 +90,12 @@ class TopVoters extends Command
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
             $ch = curl_init();
-
+            $webhook = env('DISCORD_WEBHOOK_ANNOUCEMNETS');
+            if (env('APP_ENV') === 'local') {
+                $webhook = env('DISCORD_WEBHOOK_LOCAL');
+            }
             curl_setopt_array($ch, [
-                CURLOPT_URL => env('DISCORD_WEBHOOK_ANNOUCEMNETS'),
+                CURLOPT_URL => $webhook,
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $hookObject,
                 CURLOPT_HTTPHEADER => [

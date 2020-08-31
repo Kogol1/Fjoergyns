@@ -23,24 +23,4 @@ class Admin extends Model
     {
         return $this->hasMany(AdminAlias::class);
     }
-
-    /**
-     * @var array
-     */
-    public static $admins = [
-        'Teleriann',
-        'Kogol',
-        'Flaury',
-        'DraganCZ',
-        'JustAmynka',
-        'JackiiePumpkin',
-        '_TotoWolff_',
-        'Ansara',
-        'Just_Weboo',
-        'Console',
-        'Pavloskeera',
-        'sindy580',
-        'Kiklily',
-        'NvmYes',
-    ];
 }
