@@ -15,6 +15,14 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->get('/commands/{name}/{server}',[
+    'as' => 'commands', 'uses' => 'ApiController@getCommands'
+]);
+
+$router->get('/tpa-kills/{killer}/{victim}/{server}',[
+    'as' => 'tpa-kills', 'uses' => 'ApiController@getTpaKills'
+]);
+
 $router->post('/test-api', [
     'as' => 'test-api', 'uses' => 'ApiController@post'
 ]);
