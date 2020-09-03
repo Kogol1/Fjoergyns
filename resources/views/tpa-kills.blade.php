@@ -23,7 +23,7 @@
 
                 <div class="row">
                     <div class="col-md-2">
-                        <span style="font-size: small">{{ date('d.m.Y H:s:i', $command->time)}}</span>
+                        <span style="font-size: small">{{ date('d.m.Y H:i:s', $command->time)}}</span>
                     </div>
                     <div class="col-md-10">
                         <span style="color: @if($command->user()->user == $killer) darkred @else blue @endif">
@@ -35,7 +35,7 @@
             @if(!is_null($command->date))
                     <div class="row">
                         <div class="col-md-2">
-                            <span style="font-size: small">{{ date('d.m.Y H:s:i', $command->time)}}</span>
+                            <span style="font-size: small">{{ date('d.m.Y H:i:s', $command->time)}}</span>
                         </div>
                         <div class="col-md-10">
                         <span style="color: mediumvioletred">

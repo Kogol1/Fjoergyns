@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Admin extends Model
 {
-    protected $fillable = ['name', 'role', 'active',];
+    protected $fillable = ['name', 'role', 'active', 'ip'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -22,5 +22,10 @@ class Admin extends Model
     public function aliases(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(AdminAlias::class);
+    }
+
+    public static function getIpAdressessToArray(): array
+    {
+        return self::whereNotNull('ip')->pluck('ip')->toArray();
     }
 }

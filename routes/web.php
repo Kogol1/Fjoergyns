@@ -16,11 +16,15 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/commands/{name}/{server}',[
-    'as' => 'commands', 'uses' => 'ApiController@getCommands'
+    'as' => 'commands',
+    'uses' => 'ApiController@getCommands',
+    'middleware' => 'ip-check',
 ]);
 
 $router->get('/tpa-kills/{killer}/{victim}/{server}',[
-    'as' => 'tpa-kills', 'uses' => 'ApiController@getTpaKills'
+    'as' => 'tpa-kills',
+    'uses' => 'ApiController@getTpaKills',
+    'middleware' => 'ip-check',
 ]);
 
 $router->post('/test-api', [

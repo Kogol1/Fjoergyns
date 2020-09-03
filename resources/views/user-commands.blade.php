@@ -21,7 +21,7 @@
             @if(!$command->uselessCommand())
                 <div class="row">
                     <div class="col-md-2">
-                        <span style="font-size: small">{{ date('d.m.Y H:s:i', $command->time)}}</span>
+                        <span style="font-size: small">{{ date('d.m.Y H:i:s', $command->time)}}</span>
                     </div>
                     <div class="col-md-10">
                         <span style="color: {{ $command->getColor() }}">{{ $command->message }}</span>
