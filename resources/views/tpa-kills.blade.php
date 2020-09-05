@@ -8,10 +8,50 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
 <body style="font-family: 'Source Code Pro', monospace;">
 <div class="container" style="margin-top: 30px">
+    <div class="container">
+        <form id="form">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input name="killer" type="text" class="form-control" id="killer" placeholder="Nick vraha" value="{{$killer ?? null}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input name="victim" type="text" class="form-control" id="victim" placeholder="Nick oběti" value="{{$victim ?? null}}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select class="form-control" id="server">
+                            <option @if($server === 'Survival') selected @endif>Survival</option>
+                            <option @if($server === 'Economy') selected @endif>Economy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div id="submit" class="btn btn-primary">Vyhledat</div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        $("#submit").click(function () {
+            var http = window.location.origin;
+            var killer = $("#killer").val();
+            var victim = $("#victim").val();
+            var server = $("#server").val();
+            if (killer !== '' && victim !== '') {
+                window.location.replace(http + '/tpa-kills/' + killer + '/' + victim + '/' + server);
+            }
+        });
+    </script>
+
     @if(isset($killer) && isset($victim) && isset($log))
         <h3>
             Log vraha <span style="color:darkred">{{ $killer }}</span> a oběti <span
@@ -33,16 +73,16 @@
                 </div>
             @endif
             @if(!is_null($command->date))
-                    <div class="row">
-                        <div class="col-md-2">
-                            <span style="font-size: small">{{ date('d.m.Y H:i:s', $command->time)}}</span>
-                        </div>
-                        <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-2">
+                        <span style="font-size: small">{{ date('d.m.Y H:i:s', $command->time)}}</span>
+                    </div>
+                    <div class="col-md-10">
                         <span style="color: mediumvioletred">
                             {{ $killer }} zabil {{ $victim }} pomocí {{ $command->weapon }}
                             </span>
-                        </div>
                     </div>
+                </div>
             @endif
         @endforeach
     @else

@@ -87,12 +87,22 @@ $test->save();
     {
         $planServer = PlanServer::where('name', ucfirst($server))->first();
         if ($planServer === null){
-            return 'Špatný server';
+            return view('tpa-kills')->with([
+                'log' => $log ?? null,
+                'killer' => $killer ?? null,
+                'victim' => $victim ?? null,
+                'server' => $server,
+            ]);
         }
         $planKiller = PlanUser::where('nickname',$killer)->where('server_uuid', $planServer->uuid)->first();
         $planVictim = PlanUser::where('nickname',$victim)->where('server_uuid', $planServer->uuid)->first();
         if ($planKiller === null || $planVictim === null){
-            return 'Hráč nenalezen';
+            return view('tpa-kills')->with([
+                'log' => $log ?? null,
+                'killer' => $killer ?? null,
+                'victim' => $victim ?? null,
+                'server' => $server,
+            ]);
         }
         $planDeaths = PlanKills::where('victim_uuid', $planVictim->uuid)->where('killer_uuid', $planKiller->uuid)->where('server_uuid', $planServer->uuid)->get();
         foreach ($planDeaths as $planDeath){
