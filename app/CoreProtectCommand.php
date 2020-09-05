@@ -19,6 +19,7 @@ class CoreProtectCommand extends Model
         'inventorymirror',
         'kittycannon',
         'ping',
+        'ac',
     ];
 
     public static $privateMessagesCommands = [
