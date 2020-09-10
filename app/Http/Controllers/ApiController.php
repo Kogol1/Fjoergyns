@@ -57,15 +57,17 @@ class ApiController extends Controller
      */
     public function getTps()
     {
-        $test = Test::orderByDesc('id')->first();
-        if ($test === null){
-            return json_encode('no data found');
+        $data = [];
+        $tests = Test::orderByDesc('id')->take(2)->get();
+        foreach ($tests as $test){
+            $data_test = (json_decode($test->data, true));
+            $data_test['date'] = $test->created_at->format('Y-m-d H:i:s');
+            if (isset($data_test["api-key"])){
+                unset($data_test["api-key"]);
+            }
+            $data[] = $data_test;
         }
-        $data = (json_decode($test->data, true));
-        $data['date'] = $test->created_at->format('Y-m-d H:i:s');
-        if (isset($data["api-key"])){
-            unset($data["api-key"]);
-        }
+
         return json_encode($data);
     }
 
