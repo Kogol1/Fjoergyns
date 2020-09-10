@@ -22,7 +22,7 @@ class StatusesController extends Controller
      */
     public function post()
     {
-        if (!isset($_POST['api-key']) || !$_POST['api-key'] === env('API_KEY')){
+        if (!isset($_REQUEST['api-key']) || !$_REQUEST['api-key'] === env('API_KEY')){
             return response('Wrong or no api key', 401);
         }
         $status = new Status($_REQUEST);
