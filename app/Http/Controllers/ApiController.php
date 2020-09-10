@@ -42,10 +42,10 @@ class ApiController extends Controller
         ];
     }
 
-    public function post()
+    public function post(): bool
     {
         $test = new Test;
-        $test->save();
+        return $test->save();
     }
 
     public function getCommands($name, $server): View
