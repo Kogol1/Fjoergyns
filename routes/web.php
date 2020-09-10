@@ -27,6 +27,6 @@ $router->get('/tpa-kills/{killer}/{victim}/{server}',[
     'middleware' => 'ip-check',
 ]);
 
-$router->get('/test-api', [
+$router->post('/test-api', [
     'as' => 'test-api', 'uses' => 'ApiController@post'
 ]);
