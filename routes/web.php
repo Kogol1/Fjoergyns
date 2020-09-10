@@ -31,6 +31,10 @@ $router->post('/test-api', [
     'as' => 'test-api', 'uses' => 'ApiController@post'
 ]);
 
+$router->post('/api-post-server-status', [
+    'as' => 'api-post-server-status', 'uses' => 'ApiController@post'
+]);
+
 $router->get('/test-api-get', [
     'as' => 'test-api-get', 'uses' => 'ApiController@getTps'
 ]);
