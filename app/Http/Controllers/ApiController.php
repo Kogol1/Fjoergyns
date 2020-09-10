@@ -59,6 +59,7 @@ class ApiController extends Controller
     public function getTps()
     {
         dd(Status::getServersToJson());
+        dd(Status::getServersToJson());
         $data = [];
         $tests = Test::orderByDesc('id')->take(2)->get();
         foreach ($tests as $test){
