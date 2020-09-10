@@ -52,10 +52,21 @@ class ApiController extends Controller
         return response('Data saved: '.$test->data, 200);
     }
 
+    /**
+     * @return false|string
+     */
     public function getTps()
     {
         $test = Test::orderByDesc('id')->first();
-        return $test->data;
+        if ($test === null){
+            return json_encode('no data found');
+        }
+        $data = (json_decode($test->data, true));
+        $data['date'] = $test->created_at->format('Y-m-d H:i:s');
+        if (isset($data["api-key"])){
+            unset($data["api-key"]);
+        }
+        return json_encode($data);
     }
 
     public function getCommands($name, $server): View
