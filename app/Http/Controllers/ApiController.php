@@ -58,20 +58,7 @@ class ApiController extends Controller
      */
     public function getTps()
     {
-        dd(Status::getServersToJson());
-        dd(Status::getServersToJson());
-        $data = [];
-        $tests = Test::orderByDesc('id')->take(2)->get();
-        foreach ($tests as $test){
-            $data_test = (json_decode($test->data, true));
-            $data_test['date'] = $test->created_at->format('Y-m-d H:i:s');
-            if (isset($data_test["api-key"])){
-                unset($data_test["api-key"]);
-            }
-            $data[] = $data_test;
-        }
-
-        return json_encode($data);
+        return Status::getServersToJson();
     }
 
     public function getCommands($name, $server): View
