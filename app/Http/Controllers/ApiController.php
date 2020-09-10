@@ -54,8 +54,8 @@ class ApiController extends Controller
 
     public function getTps()
     {
-        $test = Test::fisrt();
-        return $test->data();
+        $test = Test::orderByDesc('id')->first();
+        return $test->data;
     }
 
     public function getCommands($name, $server): View
