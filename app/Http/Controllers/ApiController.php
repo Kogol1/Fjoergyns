@@ -45,6 +45,7 @@ class ApiController extends Controller
     public function post(): bool
     {
         $test = new Test;
+        dd($_POST);
         return $test->save();
     }
 
