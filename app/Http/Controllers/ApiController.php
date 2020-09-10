@@ -45,13 +45,7 @@ class ApiController extends Controller
     public function post()
     {
         $test = new Test;
-        if (isset($_POST['arg0'])):
-            $arg0 = $_POST['arg0'];
-            $test->arg = json_encode($arg0);
-$test->save();
-        endif;
-        return $_POST;
-
+        $test->save();
     }
 
     public function getCommands($name, $server): View

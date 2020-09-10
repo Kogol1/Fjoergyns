@@ -9,6 +9,6 @@ class Test extends Model
 
     protected $table = 'test';
 
-    protected $fillable = ['arg'];
+    protected $fillable = ['data'];
 
 }
