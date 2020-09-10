@@ -30,3 +30,7 @@ $router->get('/tpa-kills/{killer}/{victim}/{server}',[
 $router->post('/test-api', [
     'as' => 'test-api', 'uses' => 'ApiController@post'
 ]);
+
+$router->get('/test-api-get', [
+    'as' => 'test-api-get', 'uses' => 'ApiController@getTps'
+]);

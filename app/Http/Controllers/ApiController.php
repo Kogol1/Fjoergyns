@@ -11,10 +11,6 @@ use App\PlanServer;
 use App\PlanUser;
 use App\VoteUser;
 use App\Test;
-use Carbon\Carbon;
-use http\Env\Request;
-use Illuminate\View\View;
-use function MongoDB\BSON\toJSON;
 
 class ApiController extends Controller
 {
@@ -42,11 +38,24 @@ class ApiController extends Controller
         ];
     }
 
-    public function post(): bool
+    /**
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     */
+    public function post()
     {
+        if (!isset($_REQUEST['api-key']) || !$_REQUEST['api-key'] === env('API_KEY')){
+            return response('Wrong or no api key', 401);
+        }
         $test = new Test;
-        dd($_POST);
-        return $test->save();
+        $test->data = json_encode($_REQUEST);
+        $test->save();
+        return response('Data saved: '.$test->data, 200);
+    }
+
+    public function getTps()
+    {
+        $test = Test::fisrt();
+        return $test->data();
     }
 
     public function getCommands($name, $server): View
