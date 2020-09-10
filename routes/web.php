@@ -32,7 +32,7 @@ $router->post('/test-api', [
 ]);
 
 $router->post('/api-post-server-status', [
-    'as' => 'api-post-server-status', 'uses' => 'ApiController@post'
+    'as' => 'api-post-server-status', 'uses' => 'StatusesController@post'
 ]);
 
 $router->get('/test-api-get', [
