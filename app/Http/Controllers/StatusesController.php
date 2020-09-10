@@ -27,7 +27,15 @@ class StatusesController extends Controller
         }
         $status = new Status($_REQUEST);
         $status->save();
-        return response('Data saved: '.$status->data, 200);
+        return response('Data saved', 200);
+    }
+
+    public function get()
+    {
+        if (!isset($_REQUEST['api-key']) || !$_REQUEST['api-key'] === env('API_KEY')){
+            return response('Wrong or no api key', 401);
+        }
+        return Status::getServersToJson();
     }
 
 

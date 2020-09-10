@@ -9,6 +9,7 @@ use App\CoreProtectUserEco;
 use App\PlanKills;
 use App\PlanServer;
 use App\PlanUser;
+use App\Status;
 use App\VoteUser;
 use App\Test;
 
@@ -57,6 +58,7 @@ class ApiController extends Controller
      */
     public function getTps()
     {
+        dd(Status::getServersToJson());
         $data = [];
         $tests = Test::orderByDesc('id')->take(2)->get();
         foreach ($tests as $test){
