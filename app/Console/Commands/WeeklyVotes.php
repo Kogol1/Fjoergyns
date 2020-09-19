@@ -41,6 +41,22 @@ class WeeklyVotes extends Command
     {
         $lottery = VoteUser::rollWeeklyWinner();
 
+        if (empty($lottery)){
+            $lotteryField = [
+                "name" => ':first_place: Výherce loterie',
+                "value" => 'Tuto loterii nikdo nevyhrává. Žádný z hráčů nesplnil podmínky soutěže. Pokud se chcete zapojit do loterie na příští týden, přečtěte si pravidla, aby jste splnili podmínky slosování.',
+                "inline" => true
+            ];
+        }else{
+            $lotteryField = [
+                "name" => ':first_place: Výherce loterie',
+                "value" => 'Výhercem se stává: **' . $lottery['winner']['PlayerName'] . '** s výherním číslem: **' . $lottery['number'] .
+                    "\n **Do loterie bylo zapsáno **" . $lottery['totalPlayers'] . ' hráčů**.'.
+                    "\n\n `Výhra: 10 bodů do voteshopu (bude vám připsána automaticky)`",
+                "inline" => true
+            ];
+        }
+
         //    if (\Carbon\Carbon::now()->endOfMonth()->toDateString() === \Carbon\Carbon::now()->toDateString()) {
         $hookObject = json_encode([
             "content" => "",
@@ -71,13 +87,7 @@ class WeeklyVotes extends Command
                             "inline" => false,
 
                         ],
-                        [
-                            "name" => ':first_place: Výherce loterie',
-                            "value" => 'Výhercem se stává: **' . $lottery['winner']['PlayerName'] . '** s výherním číslem: **' . $lottery['number'] .
-                                "\n **Do loterie bylo zapsáno **" . $lottery['totalPlayers'] . ' hráčů**.'.
-                                "\n\n `Výhra: 10 bodů do voteshopu (bude vám připsána automaticky)`",
-                            "inline" => true
-                        ],
+                        $lotteryField,
                         [
                             "name" => ':question: Jak se zapojit do loterie',
                             "value" => 'Do loterie se automaticky započítává každý hráč, který má za týden více jak 7 hlasů. Každý takový hráč má stejnou váhu a je jedno jestli hlasoval víc nebo ne.',

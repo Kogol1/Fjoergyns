@@ -9,7 +9,7 @@ class VoteUser extends Model
 
     protected $table = 'VotingPlugin_Users';
     protected $connection = 'mysql_vote';
-
+    public $timestamps = false;
     protected $primaryKey = 'uuid';
 
     protected $fillable = [
@@ -81,6 +81,9 @@ class VoteUser extends Model
     public static function rollWeeklyWinner(): array
     {
         $votersCount = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->count();
+        if ($votersCount === 0){
+            return [];
+        }
         $voters = self::where('WeeklyTotal', '>', 7)->whereNull('TopVoterIgnore')->get('PlayerName')->toArray();
         $n = random_int(0, $votersCount);
         shuffle($voters);

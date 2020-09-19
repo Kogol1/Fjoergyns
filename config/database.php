@@ -22,6 +22,15 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
         ],
+        'mysql_vote_eco' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST'),
+            'database' => env('DB_DATABASE_VOTE_ECO'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+        ],
         'mysql_litebans' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST'),

@@ -20,6 +20,8 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\CreateRole::class,
         \App\Console\Commands\CreateAdmin::class,
         \App\Console\Commands\CreateAlias::class,
+        \App\Console\Commands\PurgeOldData::class,
+        \App\Console\Commands\TransferVotes::class,
     ];
 
     /**
@@ -30,9 +32,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('czs:top-vote')->dailyAt('22:30');
+        $schedule->command('czs:top-vote')->dailyAt('16:30');
         $schedule->command('czs:weekly-vote')->dailyAt('21:59');
-        $schedule->command('czs:top-warns')->dailyAt('10:00');
-        $schedule->command('czs:top-bans')->dailyAt('10:00');
+        $schedule->command('czs:top-warns')->dailyAt('12:00');
+        $schedule->command('czs:top-bans')->dailyAt('12:00');
     }
 }
