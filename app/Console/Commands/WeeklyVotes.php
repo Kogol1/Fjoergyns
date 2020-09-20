@@ -52,12 +52,11 @@ class WeeklyVotes extends Command
                 "name" => ':first_place: Výherce loterie',
                 "value" => 'Výhercem se stává: **' . $lottery['winner']['PlayerName'] . '** s výherním číslem: **' . $lottery['number'] .
                     "\n **Do loterie bylo zapsáno **" . $lottery['totalPlayers'] . ' hráčů**.'.
-                    "\n\n `Výhra: 10 bodů do voteshopu (bude vám připsána automaticky)`",
+                    "\n\n `Výhra: 25 bodů do voteshopu (bude vám připsána automaticky)`",
                 "inline" => true
             ];
         }
 
-        //    if (\Carbon\Carbon::now()->endOfMonth()->toDateString() === \Carbon\Carbon::now()->toDateString()) {
         $hookObject = json_encode([
             "content" => "",
             "username" => "Czech-Survival",
@@ -120,9 +119,8 @@ class WeeklyVotes extends Command
             ]
         ]);
 
-        $response = curl_exec($ch);
+        curl_exec($ch);
         curl_close($ch);
     }
 
-    //   }
 }

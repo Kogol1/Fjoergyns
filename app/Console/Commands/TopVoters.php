@@ -75,7 +75,8 @@ class TopVoters extends Command
                             ],
                             [
                                 "name" => ':third_place: 3. místo: ' . $topVoters[2]->PlayerName . ' s počtem měsíčních hlasů: ' . $topVoters[2]->MonthTotal,
-                                "value" => 'Počet hlasů celkem: ' . $topVoters[2]->AllTimeTotal,
+                                "value" => 'Počet hlasů celkem: ' . $topVoters[2]->AllTimeTotal.
+                                "\n\n `Teleriann vám odměny rozdá, stačí mu napsat do přímé zprávy na ds.`",
                                 "inline" => false
                             ],
                             [
@@ -103,7 +104,7 @@ class TopVoters extends Command
                 ]
             ]);
 
-            $response = curl_exec($ch);
+            curl_exec($ch);
             curl_close($ch);
         }
 
