@@ -57,6 +57,38 @@ class WeeklyVotes extends Command
             ];
         }
 
+        $fields = [
+            [
+                "name" => ':chart_with_upwards_trend: Statistiky:',
+                "value" => "Počet hlasů za týden: **" . VoteUser::getWeeklyVotesCount() .'**'.
+                    "\n Počet hráčů, kteří tento týden alespoň jednou zahlasovali: **" . VoteUser::getWeeklyVoteUsersCount() .'**'.
+                    "\n Nejvíce za tento týden hlasoval hráč: **" . VoteUser::getWeeklyTopVoter()->PlayerName . '** s počtem hlasů: **' . VoteUser::getWeeklyTopVoter()->WeeklyTotal . '**',
+                "inline" => false,
+
+            ],
+            $lotteryField,
+            [
+                "name" => ':question: Jak se zapojit do loterie',
+                "value" => 'Do loterie se automaticky započítává každý hráč, který má za týden více jak 7 hlasů. Každý takový hráč má stejnou váhu a je jedno jestli hlasoval víc nebo ne.',
+                "inline" => true
+            ],
+            [
+                "name" => 'Děkujeme všem hráčům, kteří hlasovali',
+                "value" => '<:CZS:574514963381616651> <:mchearth:520086730515152896>',
+                "inline" => false
+            ],
+        ];
+
+        if (env('APP_ENV') === 'localhost'){
+            $debugField = [
+                "name" => 'DEBUG MODE <:mc_bee:614491304491089930>',
+                "value" => 'Initiator: '.env('APP_LOCATION'),
+                "inline" => false
+            ];
+            array_push($fields, $debugField);
+        }
+
+
         $hookObject = json_encode([
             "content" => "",
             "username" => "Czech-Survival",
@@ -77,27 +109,7 @@ class WeeklyVotes extends Command
                         'name' => 'CZS Top Vote',
                         'icon_url' => 'https://czech-survival.cz/images/index/logo.png',
                     ],
-                    "fields" => [
-                        [
-                            "name" => ':chart_with_upwards_trend: Statistiky:',
-                            "value" => "Počet hlasů za týden: **" . VoteUser::getWeeklyVotesCount() .'**'.
-                                "\n Počet hráčů, kteří tento týden alespoň jednou zahlasovali: **" . VoteUser::getWeeklyVoteUsersCount() .'**'.
-                                "\n Nejvíce za tento týden hlasoval hráč: **" . VoteUser::getWeeklyTopVoter()->PlayerName . '** s počtem hlasů: **' . VoteUser::getWeeklyTopVoter()->WeeklyTotal . '**',
-                            "inline" => false,
-
-                        ],
-                        $lotteryField,
-                        [
-                            "name" => ':question: Jak se zapojit do loterie',
-                            "value" => 'Do loterie se automaticky započítává každý hráč, který má za týden více jak 7 hlasů. Každý takový hráč má stejnou váhu a je jedno jestli hlasoval víc nebo ne.',
-                            "inline" => true
-                        ],
-                        [
-                            "name" => 'Děkujeme všem hráčům, kteří hlasovali',
-                            "value" => '<:CZS:574514963381616651> <:mchearth:520086730515152896>',
-                            "inline" => false
-                        ]
-                    ],
+                    "fields" => $fields,
                 ],
             ],
 
