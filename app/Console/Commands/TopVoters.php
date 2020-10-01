@@ -39,7 +39,6 @@ class TopVoters extends Command
      */
     public function handle()
     {
-        if (\Carbon\Carbon::now()->endOfMonth()->toDateString() === \Carbon\Carbon::now()->toDateString()) {
             $topVoters = VoteUser::getTopVoters(5);
             $hookObject = json_encode([
                 "content" => "",
@@ -107,6 +106,4 @@ class TopVoters extends Command
             curl_exec($ch);
             curl_close($ch);
         }
-
-    }
 }
