@@ -7,8 +7,9 @@
     "require": {
         "php": "^7.2.5",
         "laravel/lumen-framework": "^7.0",
-      "ext-json": "*",
-        "ext-curl": "*"
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-mongodb": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",

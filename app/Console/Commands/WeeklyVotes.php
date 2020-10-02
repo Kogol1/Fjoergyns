@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\DiscordMessage;
 use App\VoteUser;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -79,14 +80,43 @@ class WeeklyVotes extends Command
             ],
         ];
 
-        if (env('APP_ENV') === 'localhost'){
+        if (env('APP_ENV') === 'localhost') {
             $debugField = [
                 "name" => 'DEBUG MODE <:mc_bee:614491304491089930>',
-                "value" => 'Initiator: '.env('APP_LOCATION'),
+                "value" => 'Initiator: ' . env('APP_LOCATION'),
                 "inline" => false
             ];
             array_push($fields, $debugField);
         }
+
+
+        $message = new DiscordMessage();
+
+        $message->content = '';
+        //$message->username = 'username';
+        //$message->avatar = '';
+
+        $message->useEmbed = true;
+        $message->title = 'Týdenní shrnutí (' . Carbon::today()->subDays(7)->format('d.m.Y') . ' - ' . Carbon::today()->format('d.m.Y') . ')';
+        $message->description = 'ffff';
+        $message->color = '';
+
+        $message->footer = DiscordMessage::FOOTER_DEFAULT;
+        $message->footer_text = 'Kogol Botttt';
+        $message->footer_img = 'https://minotar.net/cube/Kogol/100.png';
+
+
+        $message->fields = '';
+
+
+        $message->author = '';
+        $message->author_img = '';
+
+        $message->webhook = env('DISCORD_WEBHOOK_LOCAL');
+        $message->post();
+
+
+        dd('a');
 
 
         $hookObject = json_encode([
@@ -96,7 +126,7 @@ class WeeklyVotes extends Command
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => 'Týdenní shrnutí ('. Carbon::today()->subDays(7)->format('d.m.Y') .' - '. Carbon::today()->format('d.m.Y').')',
+                    "title" => 'Týdenní shrnutí (' . Carbon::today()->subDays(7)->format('d.m.Y') . ' - ' . Carbon::today()->format('d.m.Y') . ')',
                     "type" => "rich",
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
