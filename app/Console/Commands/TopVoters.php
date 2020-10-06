@@ -39,7 +39,16 @@ class TopVoters extends Command
      */
     public function handle()
     {
-            $topVoters = VoteUser::getTopVoters(5);
+            $topVoters = VoteUser::getTopVoters(10);
+
+            $value = '';
+            $count = 1;
+            foreach ($topVoters as $topVoter){
+                if ($count > 3){
+                    $value.= '**'. $count .'/** '. $topVoter->PlayerName.' - Měsíčních hlasů: '. $topVoter->MonthTotal."\n";
+                }
+               $count++;
+            }
             $hookObject = json_encode([
                 "content" => "",
                 "username" => "Czech-Survival",
@@ -75,7 +84,8 @@ class TopVoters extends Command
                             [
                                 "name" => ':third_place: 3. místo: ' . $topVoters[2]->PlayerName . ' s počtem měsíčních hlasů: ' . $topVoters[2]->MonthTotal,
                                 "value" => 'Počet hlasů celkem: ' . $topVoters[2]->AllTimeTotal.
-                                "\n\n `Teleriann vám odměny rozdá, stačí mu napsat do přímé zprávy na ds.`",
+                                    "\n\n".$value.
+                                "\n\n `První tři hráči si zaslouží odměnu, Teleriann vám odměny rozdá, stačí mu napsat do přímé zprávy na ds.`",
                                 "inline" => false
                             ],
                             [

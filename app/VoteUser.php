@@ -47,11 +47,11 @@ class VoteUser extends Model
     public static function getTopVoters($top): array
     {
         $topVoters = self::orderByDesc('MonthTotal')->whereNull('TopVoterIgnore')->take($top)->get();
-        return [
-            $topVoters->first(),
-            $topVoters->get(1),
-            $topVoters->get(2),
-        ];
+        $returnArray = [];
+        foreach ($topVoters as $topVoter){
+            $returnArray[] = $topVoter;
+        }
+        return $returnArray;
     }
 
     /**
