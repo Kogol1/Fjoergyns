@@ -39,6 +39,7 @@ class WeeklyVotes extends Command
      */
     public function handle()
     {
+
         $lottery = VoteUser::rollWeeklyWinner();
 
         if (empty($lottery)){

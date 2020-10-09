@@ -88,10 +88,20 @@ class VoteUser extends Model
         $n = random_int(0, $votersCount);
         shuffle($voters);
         $winner = $voters[$n];
+        self::where('PlayerName', 'Kogol')->first()->addPoints(25);
+        dd($winnerUser);
         return [
             'winner' => $winner,
             'number' => $n + 1,
             'totalPlayers' => $votersCount,
         ];
+    }
+
+    public function addPoints($points): void
+    {
+        $playerName = $this->PlayrName;
+        $result = shell_exec('/home/kogol/add_points.sh '.$playerName.'" "'.$points);
+        var_dump($result);
+        dd($this->PlayerName, $this->Points);
     }
 }
