@@ -105,6 +105,5 @@ class VoteUser extends Model
         $playerName = $this->PlayerName;
 
         shell_exec('sudo screen -S Survival -p 0 -X stuff "adminvote User ' . $playerName . ' AddPoints ' . $points . '\n";');
-        shell_exec('sudo screen -S Economy -p 0 -X stuff "adminvote User ' . $playerName . ' AddPoints ' . $points . '\n";');
     }
 }
