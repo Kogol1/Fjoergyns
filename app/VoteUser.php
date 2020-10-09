@@ -88,7 +88,10 @@ class VoteUser extends Model
         $n = random_int(0, $votersCount);
         shuffle($voters);
         $winner = $voters[$n];
-        self::where('PlayerName', $winner['PlayerName'])->first()->addPoints(25);
+        if (env('APP_ENV') === 'production'){
+            self::where('PlayerName', $winner['PlayerName'])->first()->addPoints(25);
+        }
+
 
         return [
             'winner' => $winner,
