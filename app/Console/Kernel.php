@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\CreateAlias::class,
         \App\Console\Commands\PurgeOldData::class,
         \App\Console\Commands\TransferVotes::class,
+        \App\Console\Commands\DiskUsage::class,
     ];
 
     /**
