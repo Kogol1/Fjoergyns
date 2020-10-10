@@ -132,8 +132,8 @@ class DiskUsage extends Command
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
                     "footer" => [
-                        "text" => "Fjoergyns",
-                        "icon_url" => 'https://minotar.net/avatar/Fjoergyns/100.png',
+                        "text" => 'APP location: '.env('APP_LOCATION'),
+                        "icon_url" => 'https://minotar.net/cube/Kogol/100.png',
                     ],
                     "color" => hexdec("FF6347"),
                     "author" => [
@@ -147,7 +147,7 @@ class DiskUsage extends Command
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         $ch = curl_init();
-        $webhook = env('DISCORD_WEBHOOK_LOCAL');
+        $webhook = env('DISCORD_WEBHOOK_SERVER_STATUS');
         if (env('APP_ENV') === 'local') {
             $webhook = env('DISCORD_WEBHOOK_LOCAL');
         }
