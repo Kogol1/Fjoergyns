@@ -47,20 +47,23 @@ class DiskUsage extends Command
     public function handle()
     {
         $fields = [];
+
+        //Free space
         $diskFreeSpace = round(disk_free_space("/") / 1000000000, 2);
 
-        $servers = [
-            'Survival' => 0,
-            'Economy' => 0,
-            'Event' => 0,
-            'BungeeCord' => 0,
-        ];
         $fields[] = [
             "name" => ':floppy_disk: Celkem volného místa:',
             "value" => 'Na disku zbývá: ' . $diskFreeSpace . 'GB volného místa <:pepejam:683642409472491520>',
             "inline" => false
         ];
 
+        //Servers file size
+        $servers = [
+            'Survival' => 0,
+            'Economy' => 0,
+            'Event' => 0,
+            'BungeeCord' => 0,
+        ];
         foreach ($servers as $server => $value) {
             $path = env('PATH_TO_MINECRAFT_FOLDER').$server;
             $bytestotal = 0;
@@ -83,6 +86,7 @@ class DiskUsage extends Command
                 "inline" => false
             ];
 
+        //Recovery
         $path = env('PATH_TO_RECOVERY_FOLDER');
         $bytestotal = 0;
         $path = realpath($path);
@@ -96,6 +100,23 @@ class DiskUsage extends Command
             [
                 "name" => 'Zálohy',
                 "value" => ':floppy_disk: Velikost záloh na disku: ' .$recoveryFolderSize. ' GB',
+                "inline" => false
+            ];
+
+        //Database
+        $path = env('PATH_TO_MYSQL_FOLDER');
+        $bytestotal = 0;
+        $path = realpath($path);
+        if ($path !== false && $path != '' && file_exists($path)) {
+            foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
+                $bytestotal += $object->getSize();
+            }
+        }
+        $mysqlFolderSize = round($bytestotal / 1000000000, 2);
+        $fields[] =
+            [
+                "name" => 'Databáze',
+                "value" => '<:mysql:764463970916499477> Velikost všech databází: ' .$mysqlFolderSize. " GB",
                 "inline" => false
             ];
 
