@@ -43,7 +43,7 @@ class PurgeOldData extends Command
      */
     public function handle()
     {
-        $time = strtotime(Carbon::now()->subDays(20));
+        $time = strtotime(Carbon::now()->subDays(15));
         DB::connection('mysql_coreprotect')->statement('DELETE FROM `CoreProtectblock` WHERE time < '.$time.' ;');
         dd(CoreProtectBlock::where('time', '<', $time)->count());
     }

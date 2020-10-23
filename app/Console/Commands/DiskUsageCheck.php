@@ -48,14 +48,21 @@ class DiskUsageCheck extends Command
     {
         $diskFreeSpace = round(disk_free_space("/") / 1000000000, 2);
 
-        if ($diskFreeSpace < 30){
+        if ($diskFreeSpace < 30) {
             $fields = [];
             $fields[] = [
                 "name" => ':exclamation: Málo místa na disku :exclamation:',
-                "value" => 'Na disku zbývá: **' . $diskFreeSpace . 'GB** volného místa'.
-                "\n<@&574196518819463188> <@&679802577080287239>",
+                "value" => 'Na disku zbývá: **' . $diskFreeSpace . 'GB** volného místa' .
+                    "\n<@&574196518819463188> <@&679802577080287239>",
                 "inline" => false
             ];
+            $originMachine = [
+                "name" => 'Command initiator',
+                "value" => 'Machine: ' . env('APP_LOCATION'),
+                "inline" => false
+            ];
+            $fields[] = $originMachine;
+
 
             $hookObject = json_encode([
                 "content" => "",
@@ -69,7 +76,7 @@ class DiskUsageCheck extends Command
                         "description" => '',
                         "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
                         "footer" => [
-                            "text" => 'APP location: '.env('APP_LOCATION'),
+                            "text" => 'APP location: ' . env('APP_LOCATION'),
                             "icon_url" => 'https://minotar.net/cube/Kogol/100.png',
                         ],
                         "color" => hexdec("FF6347"),
