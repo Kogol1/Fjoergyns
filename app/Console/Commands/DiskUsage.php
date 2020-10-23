@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Admin;
 use App\CoreProtectBlock;
 use App\Role;
+use App\Server;
 use App\VoteUser;
 use App\VoteUserEco;
 use Carbon\Carbon;
@@ -57,15 +58,10 @@ class DiskUsage extends Command
             "inline" => false
         ];
 
-        //Servers file size
-        $servers = [
-            'Survival' => 0,
-            'Economy' => 0,
-            'Event' => 0,
-            'BungeeCord' => 0,
-        ];
-        foreach ($servers as $server => $value) {
-            $path = env('PATH_TO_MINECRAFT_FOLDER').$server;
+        $servers = Server::where('check_disk_usage', true)->get();
+
+        foreach ($servers as $server) {
+            $path = env('PATH_TO_MINECRAFT_FOLDER').$server->name;
             $bytestotal = 0;
             $path = realpath($path);
             if ($path !== false && $path != '' && file_exists($path)) {
@@ -73,16 +69,18 @@ class DiskUsage extends Command
                     $bytestotal += $object->getSize();
                 }
             }
-            $servers[$server] = round($bytestotal / 1000000000, 2);
+            $server->disk_size = round($bytestotal / 1000000000, 2);
         }
+
+        $text = '';
+        foreach ($servers as $server) {
+            $text .= "\n".$server->ds_icon . ' ' . $server->name . ': ' . $server->disk_size . ' GB';
+        }
+
         $fields[] =
             [
                 "name" => 'Servery:',
-                "value" => "
-                    <:grass_bounce:587505418406723584> Survival: " .$servers['Survival'] .' GB'.
-                    "\n <:mine_coin:442734230175481856> Economy: " .$servers['Economy'] .' GB'.
-                    "\n <:cmining_jump:587505485163397120> Event: " .$servers['Event'] .' GB'.
-                    "\n <:bungeecord:635883482630848518> Bungee: " .$servers['BungeeCord'] .' GB',
+                "value" => $text,
                 "inline" => false
             ];
 

@@ -13,6 +13,15 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
         ],
+        'mysql_localhost' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_LOCALHOST'),
+            'database' => env('DB_DATABASE_LOCALHOST'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD_DB_LOCALHOST'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+        ],
         'mysql_vote' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST'),
