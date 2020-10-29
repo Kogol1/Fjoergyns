@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Admin;
 use App\CoreProtectBlock;
 use App\Role;
+use App\TokenUser;
 use App\VoteUser;
 use App\VoteUserEco;
 use Carbon\Carbon;
@@ -43,25 +44,12 @@ class TransferVotes extends Command
      */
     public function handle()
     {
-        $voteEco = VoteUserEco::where('AllTimeTotal', '>', 0)->whereNotNull('PlayerName')->get();
-        foreach ($voteEco as $economyUser){
-            $survivalUser = VoteUser::where('PlayerName', $economyUser->PlayerName)->first();
-            if ($survivalUser !== null){
-
-                if ($economyUser->AllTimeTotal > $survivalUser->AllTimeTotal){
-                    $survivalUser->AllTimeTotal = $economyUser->AllTimeTotal;
-                }
-                if ($economyUser->Point > $survivalUser->Point){
-                    $survivalUser->Point = $economyUser->Point;
-                }
-                if ($economyUser->WeeklyTotal > $survivalUser->WeeklyTotal){
-                    $survivalUser->WeeklyTotal = $economyUser->WeeklyTotal;
-                }
-                if ($economyUser->MonthTotal > $survivalUser->MonthTotal){
-                    $survivalUser->MonthTotal = $economyUser->MonthTotal;
-                }
-                $survivalUser->save();
-            }
+        $vote = VoteUser::where('Points', '>', 0)->whereNotNull('PlayerName')->get();
+        foreach ($vote as $user){
+            $tokenUser = new TokenUser();
+            $tokenUser->name = $user->PlayerName;
+            $tokenUser->tokens = $user->Points;
+            $tokenUser->save();
         }
     }
 }
