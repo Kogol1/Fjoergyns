@@ -50,6 +50,7 @@ class TransferVotes extends Command
             $tokenUser->name = $user->PlayerName;
             $tokenUser->tokens = $user->Points;
             $tokenUser->save();
+            echo $tokenUser->name.' '.$tokenUser->tokens;
         }
     }
 }
