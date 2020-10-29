@@ -46,11 +46,11 @@ class TransferVotes extends Command
     {
         $vote = VoteUser::where('Points', '>', 0)->whereNotNull('PlayerName')->get();
         foreach ($vote as $user){
-            $tokenUser = new TokenUser();
+           $tokenUser = TokenUser::firstOrNew(['name' => $user->PlayerName]);
             $tokenUser->name = $user->PlayerName;
             $tokenUser->tokens = $user->Points;
             $tokenUser->save();
-            echo $tokenUser->name.' '.$tokenUser->tokens;
+            echo $user->name.' '.$user->tokens;
         }
     }
 }
