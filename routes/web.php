@@ -42,3 +42,7 @@ $router->post('/api-get-server-status', [
 $router->get('/test-api-get', [
     'as' => 'test-api-get', 'uses' => 'ApiController@getTps'
 ]);
+
+$router->post('/api/add-vote', [
+    'as' => 'api', 'uses' => 'VotingController@addVote'
+]);
