@@ -5,10 +5,10 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class Vote extends Model
+class Player extends Model
 {
 
-    protected $table = 'votes';
+    protected $table = 'players';
 
     protected $fillable = [
         'name',
@@ -38,19 +38,9 @@ class Vote extends Model
         return self::$months[$month];
     }
 
-    public function getSumVotes($subDays)
+    public function votes()
     {
-        return self::where('name', $this->name)->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->count();
-    }
-
-    public static function getTopVoter($subDays)
-    {
-        return Vote::select('name')->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->groupBy('name')->orderByRaw('COUNT(*) DESC')->first();
-    }
-
-    public function player()
-    {
-        return $this->belongsTo(Player::class);
+        return $this->hasMany(Vote::class);
     }
 
 }

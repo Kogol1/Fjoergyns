@@ -9,6 +9,7 @@ use App\CoreProtectUserEco;
 use App\PlanKills;
 use App\PlanServer;
 use App\PlanUser;
+use App\Player;
 use App\Status;
 use App\Vote;
 use App\VoteUser;
@@ -25,8 +26,10 @@ class VotingController extends Controller
         if (!isset($_REQUEST['api-key']) || !$_REQUEST['api-key'] === env('API_KEY')){
             return response('Wrong or no api key', 401);
         }
+        $voteUser = Player::firstOrNew(['name' => $_REQUEST['player_name']]);
+
         $vote = new Vote([
-            'name' => $_REQUEST['player_name'],
+            'player_id' => $voteUser->id,
         ]);
         $vote->save();
         return response('OK', 200);
