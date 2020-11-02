@@ -26,7 +26,7 @@ class VotingController extends Controller
             return response('Wrong or no api key', 401);
         }
         $vote = new Vote([
-            'name' => $_REQUEST['name'],
+            'name' => $_REQUEST['player_name'],
         ]);
         $vote->save();
         return response('OK', 200);
