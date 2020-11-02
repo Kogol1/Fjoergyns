@@ -27,11 +27,13 @@ class VotingController extends Controller
             return response('Wrong or no api key', 401);
         }
         $voteUser = Player::firstOrNew(['name' => $_REQUEST['player_name']]);
+        $voteUser->save();
 
         $vote = new Vote([
             'player_id' => $voteUser->id,
         ]);
-        $vote->save();
+
+        $voteUser = $voteUser->votes()->saveMany([$vote]);
         return response('OK', 200);
     }
 }

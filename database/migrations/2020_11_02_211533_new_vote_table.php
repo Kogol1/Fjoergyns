@@ -14,15 +14,17 @@ class NewVoteTable extends Migration
     public function up()
     {
         Schema::dropIfExists('votes');
-        Schema::create('votes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('player_id');
-            $table->timestamps();
-        });
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
+        });
+        Schema::create('votes', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('player_id')->unsigned();
+            $table->timestamps();
+            $table->foreign('player_id')->references('id')->on('players')
+                ->onDelete('cascade');
         });
     }
 
