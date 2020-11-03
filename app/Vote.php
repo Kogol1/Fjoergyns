@@ -38,14 +38,23 @@ class Vote extends Model
         return self::$months[$month];
     }
 
-    public function getSumVotes($subDays)
-    {
-        return self::where('name', $this->name)->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->count();
-    }
-
     public static function getTopVoter($subDays)
     {
-        return Vote::select('name')->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->groupBy('name')->orderByRaw('COUNT(*) DESC')->first();
+        return Vote::select('player_id')->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->groupBy('player_id')->orderByRaw('COUNT(*) DESC')->first()->player;
+    }
+
+    public static function getTopVoters(int $subDays, int $voters)
+    {
+        $topVoters = collect([]);
+        $playerIds = self::select('player_id')
+            ->groupBy('player_id')
+            ->orderByRaw('COUNT(*) DESC')
+            ->take($voters)
+            ->pluck('player_id');
+        foreach ($playerIds as $playerId){
+            $topVoters->add(Player::find($playerId));
+        }
+        return $topVoters;
     }
 
     public function player()

@@ -40,77 +40,85 @@ class VoteStats extends Command
      */
     public function handle()
     {
+        $topVoter24h = Vote::getTopVoter(1);
+        $topVoter7d = Vote::getTopVoter(7);
+        $topVoter30d = Vote::getTopVoter(30);
 
+        $topVotersText = '';
+        $count = 1;
+        foreach (Vote::getTopVoters(30, 5) as $topVoter) {
+            $topVotersText .= '**' . $count . '/** ' . $topVoter->name . ' - hlasů za měsíc: ' . $topVoter->getSumVotes(30) . "\n";
+            $count++;
 
-            $value = '';
-            $count = 1;
+        }
 
-            $hookObject = json_encode([
-                "content" => "",
-                "username" => "Czech-Survival",
-                "avatar_url" => "https://czech-survival.cz/images/index/logo.png",
-                "tts" => false,
-                "embeds" => [
-                    [
-                        "title" => "Top vote za měsíc: " . VoteUser::$months[Carbon::today()->month],
-                        "type" => "rich",
-                        "description" => "Děkujeme všem za vaše hlasy pro náš server. Moc si toho vážíme <:mchearth:520086730515152896>\n Tady jsou borci, kteří hlasovali minulý měsíc nejvíce:",
-                        "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
-                        "footer" => [
-                            "text" => "Kogol Bot",
-                            "icon_url" => "https://minotar.net/cube/Kogol/100.png"
+        $hookObject = json_encode([
+            "content" => "",
+            "username" => "Czech-Survival",
+            "avatar_url" => "https://czech-survival.cz/images/index/logo.png",
+            "tts" => false,
+            "embeds" => [
+                [
+                    "title" => Carbon::today()->format('d.m.Y'),
+                    "type" => "rich",
+                    "description" => "",
+                    "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
+                    "footer" => [
+                        "text" => "Kogol Bot",
+                        "icon_url" => "https://minotar.net/cube/Kogol/100.png"
+                    ],
+                    "color" => hexdec("20d4a4"),
+                    "author" => [
+                        'name' => 'CZS Statistiky - hlasování',
+                        'icon_url' => 'https://czech-survival.cz/images/index/logo.png',
+                    ],
+                    "fields" => [
+                        [
+                            "name" => ':clock1: Statistiky 24 hodin:',
+                            "value" => 'Počet hlasů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDay(), Carbon::now()])->count() . "**\n"
+                                . 'Top hráč: **' . $topVoter24h->name . '** s počtem hlasů: **' . $topVoter24h->getSumVotes(1) . "**\n"
+                                . 'Celkem hráčů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDay(), Carbon::now()])->distinct('player_id')->count() . "**\n"
+                            ,
+                            "inline" => false,
                         ],
-                        "color" => hexdec("20d4a4"),
-                        "author" => [
-                            'name' => 'CZS Top Vote',
-                            'icon_url' => 'https://czech-survival.cz/images/index/logo.png',
+                        [
+                            "name" => ':calendar: Statistiky 7 dní:',
+                            "value" => 'Počet hlasů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->count() . "**\n"
+                                . 'Top hráč: **' . $topVoter7d->name . '** s počtem hlasů: **' . $topVoter7d->getSumVotes(7) . "**\n"
+                                . 'Celkem hráčů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->distinct('player_id')->count() . "**\n"
+                            ,
+                            "inline" => false,
                         ],
-                        "fields" => [
-                            [
-                                "name" => ':clock1: Statistiky 24h:',
-                                "value" => 'Počet hlasů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDay(), Carbon::now()])->count()."**\n"
-                                .'Top hráč: **' . Vote::getTopVoter(1)->name.'** s počtem hlasů: **'. Vote::getTopVoter(1)->getSumVotes(1) . "**\n"
-                                .'Celkem hráčů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDay(), Carbon::now()])->distinct('name')->count()."**\n"
-                                ,
-                                "inline" => false,
-                            ],
-                            [
-                                "name" => ':calendar: Statistiky 7d:',
-                                "value" => 'Počet hlasů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->count()."**\n"
-                                    .'Top hráč: **' . Vote::getTopVoter(7)->name.'** s počtem hlasů: **'. Vote::getTopVoter(7)->getSumVotes(7) . "**\n"
-                                    .'Celkem hráčů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->distinct('name')->count()."**\n"
-                                ,
-                                "inline" => false,
-                            ],
-                            [
-                                "name" => ':calendar: Statistiky 30d:',
-                                "value" => 'Počet hlasů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(30), Carbon::now()])->count()."**\n"
-                                    .'Top hráč: **' . Vote::getTopVoter(30)->name.'** s počtem hlasů: **'. Vote::getTopVoter(30)->getSumVotes(30) . "**\n"
-                                    .'Celkem hráčů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(30), Carbon::now()])->distinct('name')->count()."**\n"
-                                ,
-                                "inline" => false,
-                            ],
+                        [
+                            "name" => '<:animated_clock:562493945058164739> Statistiky 30 dní:',
+                            "value" => 'Počet hlasů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(30), Carbon::now()])->count() . "**\n"
+                                . 'Top hráči: **' . $topVoter30d->name . '** s počtem hlasů: **' . $topVoter30d->getSumVotes(30) . "**\n"
+                                . 'Celkem hráčů: **' . Vote::whereBetween('created_at', [Carbon::now()->subDays(30), Carbon::now()])->distinct('player_id')->count() . "**\n"
+                                . $topVotersText
+                            ,
+                            "inline" => false,
                         ],
                     ],
                 ],
+            ],
 
-            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-            $ch = curl_init();
-            $webhook = env('DISCORD_WEBHOOK_ANNOUCEMNETS');
-            if (env('APP_ENV') === 'local') {
-                $webhook = env('DISCORD_WEBHOOK_LOCAL');
-            }
-            curl_setopt_array($ch, [
-                CURLOPT_URL => $webhook,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => $hookObject,
-                CURLOPT_HTTPHEADER => [
-                    "Content-Type: application/json"
-                ]
-            ]);
-
-            curl_exec($ch);
-            curl_close($ch);
+        $ch = curl_init();
+        $webhook = env('DISCORD_WEBHOOK_LOCAL');
+        if (env('APP_ENV') === 'local') {
+            $webhook = env('DISCORD_WEBHOOK_LOCAL');
         }
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $webhook,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $hookObject,
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: application/json"
+            ]
+        ]);
+
+        curl_exec($ch);
+        curl_close($ch);
+    }
 }

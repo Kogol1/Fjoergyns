@@ -66,7 +66,8 @@ class TopWarns extends Command
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => 'Počet warnů celkem: '.Warn::get('id')->count(),
+                    "title" => 'Počet warnů celkem: '.Warn::get('id')->count().
+                        "\nPřírůstek za 24 hodin: ". Warn::countWarnsInPeriodWithoutAdmin(24),
                     "type" => "rich",
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),

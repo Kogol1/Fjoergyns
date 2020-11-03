@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\VoteUser;
+use App\Player;
+use App\Vote;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -39,19 +40,18 @@ class WeeklyVotes extends Command
      */
     public function handle()
     {
-        $lottery = VoteUser::rollWeeklyWinner();
-
-        if (empty($lottery)){
+        $lottery = Player::rollWeeklyWinner();
+        if (empty($lottery)) {
             $lotteryField = [
                 "name" => ':first_place: Výherce loterie',
                 "value" => 'Tuto loterii nikdo nevyhrává. Žádný z hráčů nesplnil podmínky soutěže. Pokud se chcete zapojit do loterie na příští týden, přečtěte si pravidla, aby jste splnili podmínky slosování.',
                 "inline" => true
             ];
-        }else{
+        } else {
             $lotteryField = [
                 "name" => ':first_place: Výherce loterie',
-                "value" => 'Výhercem se stává: **' . $lottery['winner']['PlayerName'] . '** s výherním číslem: **' . $lottery['number'] .
-                    "\n **Do loterie bylo zapsáno **" . $lottery['totalPlayers'] . ' hráčů**.'.
+                "value" => 'Výhercem se stává: **' . $lottery['winner'] . '** s výherním číslem: **' . $lottery['number'] .
+                    "\n **Do loterie bylo zapsáno **" . $lottery['totalPlayers'] . ' hráčů**.' .
                     "\n\n `Výhra: 25 bodů do voteshopu (bude vám připsána automaticky)`",
                 "inline" => true
             ];
@@ -60,11 +60,10 @@ class WeeklyVotes extends Command
         $fields = [
             [
                 "name" => ':chart_with_upwards_trend: Statistiky:',
-                "value" => "Počet hlasů za týden: **" . VoteUser::getWeeklyVotesCount() .'**'.
-                    "\n Počet hráčů, kteří tento týden alespoň jednou zahlasovali: **" . VoteUser::getWeeklyVoteUsersCount() .'**'.
-                    "\n Nejvíce za tento týden hlasoval hráč: **" . VoteUser::getWeeklyTopVoter()->PlayerName . '** s počtem hlasů: **' . VoteUser::getWeeklyTopVoter()->WeeklyTotal . '**',
+                "value" => "Počet hlasů za týden: **" . Vote::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->count() . '**' .
+                    "\n Počet hráčů, kteří tento týden alespoň jednou zahlasovali: **" . Vote::whereBetween('created_at', [Carbon::now()->subDays(7), Carbon::now()])->distinct('player_id')->count() . '**' .
+                    "\n Nejvíce za tento týden hlasoval hráč: **" . Vote::getTopVoter(7)->name . '** s počtem hlasů: **' . Vote::getTopVoter(7)->getSumVotes(7) . '**',
                 "inline" => false,
-
             ],
             $lotteryField,
             [
@@ -79,13 +78,13 @@ class WeeklyVotes extends Command
             ],
         ];
 
-        if (env('APP_ENV') === 'localhost'){
+        if (env('APP_ENV') === 'localhost') {
             $debugField = [
                 "name" => 'DEBUG MODE <:mc_bee:614491304491089930>',
-                "value" => 'Initiator: '.env('APP_LOCATION'),
+                "value" => 'Initiator: ' . env('APP_LOCATION'),
                 "inline" => false
             ];
-            array_push($fields, $debugField);
+            $fields[] = $debugField;
         }
 
 
@@ -96,7 +95,7 @@ class WeeklyVotes extends Command
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => 'Týdenní shrnutí ('. Carbon::today()->subDays(7)->format('d.m.Y') .' - '. Carbon::today()->format('d.m.Y').')',
+                    "title" => 'Týdenní shrnutí (' . Carbon::today()->subDays(7)->format('d.m.Y') . ' - ' . Carbon::today()->format('d.m.Y') . ')',
                     "type" => "rich",
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
@@ -117,8 +116,8 @@ class WeeklyVotes extends Command
 
         $ch = curl_init();
 
-        $webhook =  env('DISCORD_WEBHOOK_ANNOUCEMNETS');
-        if (env('APP_ENV') === 'local'){
+        $webhook = env('DISCORD_WEBHOOK_ANNOUCEMNETS');
+        if (env('APP_ENV') === 'local') {
             $webhook = env('DISCORD_WEBHOOK_LOCAL');
         }
 

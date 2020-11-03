@@ -52,6 +52,17 @@ class Warn extends Model
     /**
      * @param $adminName
      * @param $hours int
+     * @return int
+     */
+    public static function countWarnsInPeriodWithoutAdmin($hours): int
+    {
+        $warnsCount = self::where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
+        return $warnsCount ?? 0;
+    }
+
+    /**
+     * @param $adminName
+     * @param $hours int
      * @return array
      */
     public static function countWarnsInPeriodDifferServers($adminName, $hours): array
