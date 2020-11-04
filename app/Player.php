@@ -47,7 +47,7 @@ class Player extends Model
     public function getSumVotes($subDays = null)
     {
         if ($subDays === null){
-            $this->votes->count();
+            return $this->votes->count();
         }
         return $this->votes->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->count();
     }
