@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
     {
         if (env('APP_MAIN_INSTANCE') === true){
             $schedule->command('czs:top-vote')->lastDayOfMonth('23:30');
-            //$schedule->command('czs:weekly-vote')->weeklyOn(6, '23:59');
+            $schedule->command('czs:weekly-vote')->weeklyOn(6, '23:30');
             $schedule->command('czs:top-warns')->dailyAt('12:00');
             $schedule->command('czs:top-bans')->dailyAt('12:00');
             $schedule->command('czs:vote-stats')->dailyAt('12:00');
