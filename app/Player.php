@@ -64,7 +64,7 @@ class Player extends Model
         $n = random_int(0, count($voters));
         $winner = $shuffledVoters->first()->name;
         if (env('APP_ENV') === 'production'){
-            self::where('name', $winner['name'])->first()->addPoints(25);
+            self::where('name', $winner)->first()->addPoints(25);
         }
 
         return [
