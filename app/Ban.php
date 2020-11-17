@@ -18,16 +18,18 @@ class Ban extends Model
     public static function countBansByAdmins(): array
     {
         $bans = [];
-        foreach (Admin::where('active', true)->orderBy('role_id')->get() as $admin)
+        foreach (Admin::where('active', true)->whereHas('role', function ($q) {
+            $q->where('active_litebans', true);
+        })->orderBy('role_id')->get() as $admin)
         {
             $bansCount = self::where('banned_by_name', $admin->name)->count();
-            if (!$admin->aliases->isEmpty()){
-                foreach ($admin->aliases as $alias){
+            if (!$admin->aliases->isEmpty()) {
+                foreach ($admin->aliases as $alias) {
                     $bansCount += self::where('banned_by_name', $alias->alias_name)->count();
                 }
             }
 
-            $bans[$admin->name] =$bansCount;
+            $bans[$admin->name] = $bansCount;
         }
         return $bans;
     }
@@ -36,12 +38,12 @@ class Ban extends Model
      * @param $adminName
      * @return int
      */
-    public static function countPermaBans($adminName):int
+    public static function countPermaBans($adminName): int
     {
         $admin = Admin::where('name', $adminName)->first();
         $bansCount = self::where('banned_by_name', $admin->name)->where('until', -1)->count();
-        if (!$admin->aliases->isEmpty()){
-            foreach ($admin->aliases as $alias){
+        if (!$admin->aliases->isEmpty()) {
+            foreach ($admin->aliases as $alias) {
                 $bansCount += self::where('banned_by_name', $alias->alias_name)->where('until', -1)->count();
             }
         }
@@ -57,10 +59,10 @@ class Ban extends Model
     public static function countBansInPeriod($adminName, $hours): int
     {
         $admin = Admin::where('name', $adminName)->first();
-        $bansCount = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
-        if (!$admin->aliases->isEmpty()){
-            foreach ($admin->aliases as $alias){
-                $bansCount += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
+        $bansCount = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)) . '000')->count();
+        if (!$admin->aliases->isEmpty()) {
+            foreach ($admin->aliases as $alias) {
+                $bansCount += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)) . '000')->count();
             }
         }
         return $bansCount ?? 0;
@@ -74,16 +76,16 @@ class Ban extends Model
     public static function countBansInPeriodDifferServers($adminName, $hours): array
     {
         $admin = Admin::where('name', $adminName)->first();
-        $bansCountSurvival = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'survival')->count();
-        if (!$admin->aliases->isEmpty()){
-            foreach ($admin->aliases as $alias){
-                $bansCountSurvival += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'survival')->count();
+        $bansCountSurvival = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)) . '000')->where('server_origin', 'survival')->count();
+        if (!$admin->aliases->isEmpty()) {
+            foreach ($admin->aliases as $alias) {
+                $bansCountSurvival += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)) . '000')->where('server_origin', 'survival')->count();
             }
         }
-        $bansCountEconomy = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'economy')->count();
-        if (!$admin->aliases->isEmpty()){
-            foreach ($admin->aliases as $alias){
-                $bansCountEconomy += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->where('server_origin', 'economy')->count();
+        $bansCountEconomy = self::where('banned_by_name', $admin->name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)) . '000')->where('server_origin', 'economy')->count();
+        if (!$admin->aliases->isEmpty()) {
+            foreach ($admin->aliases as $alias) {
+                $bansCountEconomy += self::where('banned_by_name', $alias->alias_name)->where('time', '>', strtotime(Carbon::now()->subHours($hours)) . '000')->where('server_origin', 'economy')->count();
             }
         }
         return ['survival' => $bansCountSurvival ?? 0, 'economy' => $bansCountEconomy ?? 0];

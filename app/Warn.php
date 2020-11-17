@@ -18,7 +18,9 @@ class Warn extends Model
     public static function countWarnsByAdmins(): array
     {
         $warns = [];
-        foreach (Admin::where('active', true)->orderBy('role_id')->get() as $admin)
+        foreach (Admin::where('active', true)->whereHas('role', function ($q) {
+            $q->where('active_litebans', true);
+        })->orderBy('role_id')->get() as $admin)
         {
             $warnsCount = self::where('banned_by_name', $admin->name)->count();
             if (!$admin->aliases->isEmpty()){
