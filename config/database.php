@@ -18,7 +18,7 @@ return [
             'host' => env('DB_HOST_LOCALHOST'),
             'database' => env('DB_DATABASE_LOCALHOST'),
             'username' => env('DB_USERNAME'),
-            'password' => env('DB_PASSWORD_DB_LOCALHOST'),
+            'password' => env('DB_PASSWORD_2'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
         ],
