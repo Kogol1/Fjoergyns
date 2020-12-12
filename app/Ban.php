@@ -90,4 +90,21 @@ class Ban extends Model
         }
         return ['survival' => $bansCountSurvival ?? 0, 'economy' => $bansCountEconomy ?? 0];
     }
+
+    /**
+     * @param $adminName
+     * @param $hours int
+     * @return int
+     */
+    public static function countWarnsInPeriodWithoutAdmin($hours): int
+    {
+        $warnsCount = self::where('time', '>', strtotime(Carbon::now()->subHours($hours)).'000')->count();
+        return $warnsCount ?? 0;
+    }
+
+    public static function getPercentageOfPermaBans($admin): float
+    {
+        return round(self::countPermaBans($admin) / Admin::whereHas('role', function ($q) {
+                $q->where('active_litebans', true);})->count(), 2);
+    }
 }

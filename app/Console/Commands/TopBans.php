@@ -51,7 +51,7 @@ class TopBans extends Command
                         "\n :calendar: Počet banů za posledních 7 dní: **" . Ban::countBansInPeriod($admin, 24 * 7) .'**'.
                         "\n <:grass_bounce:587505418406723584> Počet banů na Survivalu za posledních 14 dní: **" . Ban::countBansInPeriodDifferServers($admin, 24 * 14)['survival'] .'**'.
                         "\n <:mine_coin:442734230175481856> Počet banů na Economy za posledních 14 dní: **" . Ban::countBansInPeriodDifferServers($admin, 24 * 14)['economy'].'**'.
-                        "\n :wink: Počet perma banů celkem: **" . Ban::countPermaBans($admin).'**',
+                        "\n :wink: Počet perma banů celkem: **" . Ban::countPermaBans($admin).'**'. ' | procento perma banů: **' . Ban::getPercentageOfPermaBans($admin).' %**',
                     "inline" => false
                 ];
         }
@@ -67,7 +67,8 @@ class TopBans extends Command
             "tts" => false,
             "embeds" => [
                 [
-                    "title" => 'Počet banů celkem: '.Ban::get('id')->count(),
+                    "title" => 'Počet banů celkem: '.Ban::get('id')->count().
+                    "\nPřírůstek za 24 hodin: ". Ban::countWarnsInPeriodWithoutAdmin(24),
                     "type" => "rich",
                     "description" => '',
                     "timestamp" => date_format(date_create(), 'Y-m-d\TH:i:sO'),
