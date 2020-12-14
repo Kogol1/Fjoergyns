@@ -104,6 +104,6 @@ class Ban extends Model
 
     public static function getPercentageOfPermaBans($admin): float
     {
-        return round(((self::where('until', -1)->count() / 100) * self::countPermaBans($admin))/100, 2);
+        return round((self::countPermaBans($admin) / self::where('until', -1)->count()) * 100, 2);
     }
 }
