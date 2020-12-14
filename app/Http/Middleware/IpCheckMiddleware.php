@@ -19,9 +19,6 @@ class IpCheckMiddleware
     {
         $log = new AccessLog(['ip' => $request->ip(), 'page' => $request->fullUrl()]);
         $log->save();
-        if (!in_array($request->ip(), Admin::getIpAdressessToArray())){
-            return 'Přístup odepřen. Nepovolená ip';
-        }
         return $next($request);
     }
 }

@@ -40,7 +40,9 @@ class Vote extends Model
 
     public static function getTopVoter($subDays)
     {
-        return self::select('player_id')->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])->groupBy('player_id')->orderByRaw('COUNT(*) DESC')->first()->player;
+        return self::select('player_id')
+            ->whereBetween('created_at', [Carbon::now()->subDays($subDays), Carbon::now()])
+            ->groupBy('player_id')->orderByRaw('COUNT(*) DESC')->first()->player;
     }
 
     public static function getTopVoters(int $subDays, int $voters)
