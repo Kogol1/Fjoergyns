@@ -54,7 +54,7 @@ class UnlinkBannedPlayers extends Command
             if (env('APP_LOCATION') === 'HETZNER-AMD'){
                 shell_exec('screen -S Economy -p 0 -X stuff " discordsrv unlink ' . $permaBan->player->name . '\n";');
             }
-
+            sleep(1);
         }
 
     }
