@@ -49,10 +49,10 @@ class UnlinkBannedPlayers extends Command
         $permaBans = Ban::where('time', '>', Carbon::now()->subDay()->timestamp.'000')->where('until', -1)->with('player')->get();
         foreach ($permaBans as $permaBan) {
             if (env('APP_LOCATION') === 'HETZNER-INTEL'){
-                shell_exec('sudo screen -S Survival -p 0 -X stuff " discordsrv unlink ' . $permaBan->player->name . '\n";');
+                shell_exec('screen -S Survival -p 0 -X stuff " discordsrv unlink ' . $permaBan->player->name . '\n";');
             }
             if (env('APP_LOCATION') === 'HETZNER-AMD'){
-                shell_exec('sudo screen -S Economy -p 0 -X stuff " discordsrv unlink ' . $permaBan->player->name . '\n";');
+                shell_exec('screen -S Economy -p 0 -X stuff " discordsrv unlink ' . $permaBan->player->name . '\n";');
             }
 
         }
