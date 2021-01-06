@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Admin;
 use App\CoreProtectBlock;
+use App\CoreProtectBlockEco;
 use App\Role;
 use App\VoteUser;
 use Carbon\Carbon;
@@ -43,8 +44,8 @@ class PurgeOldData extends Command
      */
     public function handle()
     {
-        $time = strtotime(Carbon::now()->subDays(15));
-        DB::connection('mysql_coreprotect')->statement('DELETE FROM `CoreProtectblock` WHERE time < '.$time.' ;');
-        dd(CoreProtectBlock::where('time', '<', $time)->count());
+        $time = Carbon::now()->subDays(20)->timestamp;
+        CoreProtectBlockEco::where('time', '<', $time)->delete();
+        CoreProtectBlock::where('time', '<', $time)->delete();
     }
 }

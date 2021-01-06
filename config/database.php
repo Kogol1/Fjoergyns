@@ -60,10 +60,10 @@ return [
         ],
         'mysql_coreprotect_eco' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST'),
+            'host' => env('DB_HOST_2'),
             'database' => env('DB_DATABASE_COREPROTECT_ECO'),
             'username' => env('DB_USERNAME'),
-            'password' => env('DB_PASSWORD'),
+            'password' => env('DB_PASSWORD_2'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
         ],
