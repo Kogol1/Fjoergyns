@@ -4,13 +4,21 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ban extends Model
 {
     protected $table = 'litebans_bans';
     protected $connection = 'mysql_litebans';
 
-    protected $primaryKey = 'id';
+    /**
+     * @return BelongsTo
+     */
+    public function player(): BelongsTo
+    {
+        return $this->belongsTo(LiteBanPlayer::class, 'uuid', 'uuid');
+    }
+
 
     /**
      * @return array
