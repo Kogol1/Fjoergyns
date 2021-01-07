@@ -42,9 +42,10 @@ class Kernel extends ConsoleKernel
             $schedule->command('czs:top-bans')->dailyAt('12:00');
             $schedule->command('czs:vote-stats')->dailyAt('12:00');
             $schedule->command('czs:purge-database')->dailyAt('03:00');
-            $schedule->command('czs:unlink-banned-players')->twiceDaily('03:00');
+
         }
         $schedule->command('system:disk-usage')->dailyAt('12:00');
         $schedule->command('system:disk-usage-check')->everyFifteenMinutes();
+        $schedule->command('czs:unlink-banned-players')->twiceDaily('03:00');
     }
 }
