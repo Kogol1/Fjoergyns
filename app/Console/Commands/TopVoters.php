@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Player;
 use App\Vote;
 use App\VoteUser;
 use Carbon\Carbon;

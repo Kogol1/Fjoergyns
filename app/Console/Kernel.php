@@ -2,6 +2,18 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateAdmin;
+use App\Console\Commands\CreateAlias;
+use App\Console\Commands\CreateRole;
+use App\Console\Commands\DiskUsage;
+use App\Console\Commands\DiskUsageCheck;
+use App\Console\Commands\PurgeOldData;
+use App\Console\Commands\TopBans;
+use App\Console\Commands\TopVoters;
+use App\Console\Commands\TopWarns;
+use App\Console\Commands\UnlinkBannedPlayers;
+use App\Console\Commands\VoteStats;
+use App\Console\Commands\WeeklyVotes;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -13,18 +25,18 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\TopVoters::class,
-        \App\Console\Commands\WeeklyVotes::class,
-        \App\Console\Commands\TopWarns::class,
-        \App\Console\Commands\TopBans::class,
-        \App\Console\Commands\CreateRole::class,
-        \App\Console\Commands\CreateAdmin::class,
-        \App\Console\Commands\CreateAlias::class,
-        \App\Console\Commands\PurgeOldData::class,
-        \App\Console\Commands\UnlinkBannedPlayers::class,
-        \App\Console\Commands\DiskUsage::class,
-        \App\Console\Commands\DiskUsageCheck::class,
-        \App\Console\Commands\VoteStats::class,
+        TopVoters::class,
+        WeeklyVotes::class,
+        TopWarns::class,
+        TopBans::class,
+        CreateRole::class,
+        CreateAdmin::class,
+        CreateAlias::class,
+        PurgeOldData::class,
+        UnlinkBannedPlayers::class,
+        DiskUsage::class,
+        DiskUsageCheck::class,
+        VoteStats::class,
     ];
 
     /**
@@ -36,15 +48,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         if (env('APP_MAIN_INSTANCE') === true){
-            $schedule->command('czs:top-vote')->lastDayOfMonth('23:30');
-            $schedule->command('czs:weekly-vote')->weeklyOn(7, '23:30');
             $schedule->command('czs:top-warns')->dailyAt('12:00');
             $schedule->command('czs:top-bans')->dailyAt('12:00');
             $schedule->command('czs:vote-stats')->dailyAt('12:00');
             $schedule->command('czs:purge-database')->dailyAt('03:00');
 
         }
-        $schedule->command('system:disk-usage')->dailyAt('12:00');
+        $schedule->command('system:disk-usage')->everyMinute();
         $schedule->command('system:disk-usage-check')->everyFifteenMinutes();
         $schedule->command('czs:unlink-banned-players')->twiceDaily('03:00');
     }
