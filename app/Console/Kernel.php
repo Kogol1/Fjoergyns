@@ -55,6 +55,6 @@ class Kernel extends ConsoleKernel
         }
         $schedule->command('system:disk-usage')->everyMinute();
         $schedule->command('system:disk-usage-check')->everyFifteenMinutes();
-        $schedule->command('czs:unlink-banned-players')->twiceDaily('03:00');
+        //$schedule->command('czs:unlink-banned-players')->twiceDaily('03:00');
     }
 }
