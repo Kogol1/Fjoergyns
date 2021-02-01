@@ -52,7 +52,6 @@ class Kernel extends ConsoleKernel
             $schedule->command('czs:top-bans')->dailyAt('12:00');
             $schedule->command('czs:vote-stats')->dailyAt('12:00');
             $schedule->command('czs:purge-database')->dailyAt('03:00');
-
         }
         $schedule->command('system:disk-usage')->everyMinute();
         $schedule->command('system:disk-usage-check')->everyFifteenMinutes();
