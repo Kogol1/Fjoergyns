@@ -23,7 +23,7 @@ class RecoveryStatus extends Command
         } else {
             $fields[] = [
                 "name" => $serverName,
-                "value" => 'Záloha souboru: **' . $fileName . '** se vytvořila na serveru ' . $serverName . '. Soubor má velikost: ' . round(filesize($pathToFile) / 1000000000, 2) . 'MB. <:pepejam:683642409472491520>',
+                "value" => 'Záloha souboru: **' . $fileName . '** se vytvořila na serveru ' . $serverName . '. Soubor má velikost: ' . round(filesize($pathToFile) / 1000000000, 2) . 'GB. <:pepejam:683642409472491520>',
                 "inline" => false
             ];
         }
