@@ -2,11 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Admin;
 use App\Ban;
-use App\CoreProtectBlock;
-use App\Role;
-use App\TokenUser;
 use App\VoteUser;
 use App\VoteUserEco;
 use Carbon\Carbon;
@@ -45,8 +41,8 @@ class UnlinkBannedPlayers extends Command
      */
     public function handle()
     {
-
-        $permaBans = Ban::where('time', '>', Carbon::now()->subDay()->timestamp.'000')->where('until', -1)->with('player')->get();
+        $permaBans = Ban::where('time', '>', Carbon::now()->subDay()->timestamp . '000')->where('until', -1)->with('player')->get();
+        dd($permaBans->first());
         foreach ($permaBans as $permaBan) {
             if (env('APP_LOCATION') === 'HETZNER-INTEL'){
                 shell_exec('screen -S Survival -p 0 -X stuff " discordsrv unlink ' . $permaBan->player->name . '\n";');
