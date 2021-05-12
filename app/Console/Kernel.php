@@ -8,6 +8,7 @@ use App\Console\Commands\DiskUsageCheck;
 use App\Console\Commands\PurgeOldData;
 use App\Console\Commands\RecoveryStatus;
 use App\Console\Commands\TopBans;
+use App\Console\Commands\TopWarns;
 use App\Console\Commands\UnlinkBannedPlayers;
 use App\Console\Commands\VoteStats;
 use App\Console\Commands\WeeklyVotes;
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         WeeklyVotes::class,
         TopBans::class,
+        TopWarns::class,
         CreateAlias::class,
         PurgeOldData::class,
         UnlinkBannedPlayers::class,
