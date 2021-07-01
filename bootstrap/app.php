@@ -48,6 +48,7 @@ $app->singleton(
     App\Console\Kernel::class
 );
 $app->withEloquent();
+$app->withFacades();
 /*
 |--------------------------------------------------------------------------
 | Register Config Files

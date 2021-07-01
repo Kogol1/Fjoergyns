@@ -12,7 +12,7 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return 'Fjoergyns API - By Kogol';
 });
 
 $router->get('/commands/{name}/{server}',[
@@ -46,3 +46,12 @@ $router->get('/test-api-get', [
 $router->post('/api/add-vote', [
     'as' => 'api', 'uses' => 'VotingController@addVote'
 ]);
+
+// Fjoergyns Raspberry Pi
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->group(['prefix' => 'v1'], function () use ($router) {
+        $router->post('fjoergyns/execute', ['uses' => 'Api\Version1\FjoergynsController@execute']);
+
+    });
+});
